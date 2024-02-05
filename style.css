@@ -1,0 +1,42 @@
+body, html {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+    margin: 0;
+}
+
+#rounds-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.round {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    border-radius: 50%; /* Makes the blocks round */
+    font-size: 14px;
+    color: black; /* Ensures text color is black by default */
+}
+
+.round.clicked {
+    background-color: red;
+    color: white; /* Changes text color to white for visibility against red */
+}
+
+#round-times {
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+}
