@@ -36,13 +36,22 @@ document.addEventListener('DOMContentLoaded', function () {
     document.body.appendChild(displayTimesButton);
 
     displayTimesButton.addEventListener('click', function() {
-        roundTimes.innerHTML = ''; // Clear previous times
+        roundTimes.innerHTML = ''; // Clear previous times display
         for (let i = 1; i < times.length; i++) { // Start from 1 as round 0 does not exist
             if(times[i]) { // Check if timing information exists
                 const timeInfo = times[i];
                 displayTimeForRound(timeInfo.round, timeInfo.startTime, timeInfo.endTime, timeInfo.timeTaken);
             }
         }
+    });
+
+    // Button to hide the displayed times
+    const hideTimesButton = document.createElement('button');
+    hideTimesButton.textContent = 'Hide Round Times';
+    document.body.appendChild(hideTimesButton);
+
+    hideTimesButton.addEventListener('click', function() {
+        roundTimes.innerHTML = ''; // Clear the display of round times
     });
 
     function displayTimeForRound(roundNumber, startTime, endTime, timeTaken) {
