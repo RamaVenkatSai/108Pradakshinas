@@ -2,17 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const roundsContainer = document.getElementById('rounds-container');
     const roundTimes = document.getElementById('round-times');
     let lastStartTime = new Date(); // Initialize start time for the first round
-
-    // Create a button for displaying round 1 time manually
-    const displayRound1TimeBtn = document.createElement('button');
-    displayRound1TimeBtn.textContent = 'Display Round 1 Time';
-    document.body.appendChild(displayRound1TimeBtn);
-    displayRound1TimeBtn.addEventListener('click', function() {
-        const currentTime = new Date();
-        // Manually calculate and display time for round 1
-        const timeTaken = (currentTime - lastStartTime) / 1000;
-        displayTimeForRound(1, lastStartTime, currentTime, timeTaken.toFixed(2));
-    });
+    let times = []; // Array to store time for each round
 
     for (let i = 0; i < 108; i++) {
         const round = document.createElement('div');
@@ -22,11 +12,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         round.addEventListener('click', function () {
             const currentTime = new Date();
-            // Skip automatic time display for round 1
-            if (i >= 1) { // Now allows the event for all rounds but skips automatic display logic for round 1
-                // Calculate time taken for the previous round
+            if (i > 0) { // Ensures this is not the first round
                 const timeTaken = (currentTime - lastStartTime) / 1000;
-                displayTimeForRound(i + 1, lastStartTime, currentTime, timeTaken.toFixed(2));
+                times[i] = { // Store the timing information instead of displaying it immediately
+                    round: i,
+                    startTime: lastStartTime,
+                    endTime: currentTime,
+                    timeTaken: timeTaken.toFixed(2)
+                };
             }
             lastStartTime = currentTime; // Update last start time for the next round
 
@@ -34,22 +27,27 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!this.classList.contains('clicked')) {
                 this.classList.add('clicked');
             }
-
-            // Special handling for the last round's time display
-            if (i === 107) {
-                displayTimeForRound(108, lastStartTime, currentTime, "N/A");
-            }
         });
     }
 
-    function displayTimeForRound(roundNumber, startTime, endTime, timeTaken) {
-        let timeDisplay = document.getElementById(`time-for-round-${roundNumber}`);
-        if (!timeDisplay) {
-            timeDisplay = document.createElement('div');
-            timeDisplay.id = `time-for-round-${roundNumber}`;
-            roundTimes.appendChild(timeDisplay);
-        }
+    // Button to display all times
+    const displayTimesButton = document.createElement('button');
+    displayTimesButton.textContent = 'Display All Round Times';
+    document.body.appendChild(displayTimesButton);
 
+    displayTimesButton.addEventListener('click', function() {
+        roundTimes.innerHTML = ''; // Clear previous times
+        for (let i = 1; i < times.length; i++) { // Start from 1 as round 0 does not exist
+            if(times[i]) { // Check if timing information exists
+                const timeInfo = times[i];
+                displayTimeForRound(timeInfo.round, timeInfo.startTime, timeInfo.endTime, timeInfo.timeTaken);
+            }
+        }
+    });
+
+    function displayTimeForRound(roundNumber, startTime, endTime, timeTaken) {
+        let timeDisplay = document.createElement('div');
         timeDisplay.innerHTML = `Round ${roundNumber}: Start Time - ${startTime.toLocaleTimeString()}, End Time - ${endTime.toLocaleTimeString()}, Time Taken - ${timeTaken} seconds`;
+        roundTimes.appendChild(timeDisplay);
     }
 });
